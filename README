@@ -1,0 +1,19 @@
+🌍 TripTrek Travel Planner API
+TripTrek is a Node.js + Express RESTful API connected to MongoDB Atlas that allows users to create and manage travel itineraries. Users can create multiple trips, add destinations and activities, and keep everything organized in one place.
+This API supports full CRUD functionality for trips, destinations, and activities.
+🚀 Features
+Create, read, update, and delete (CRUD) trips, destinations, and activities
+Uses Mongoose for MongoDB schema modeling
+Secure user accounts tied to individual trips
+Connected to MongoDB Atlas cloud database
+Supports CORS for client-side interaction
+API structure designed for integration with a future front-end UI
+
+✅ Recent Updates
+🧭 Next Steps / Future Enhancements
+
+🛠️ Tech Stack
+Node.js / Express.js
+MongoDB Atlas + Mongoose
+Dotenv for environment variables
+Nodemon (for development convenience)
