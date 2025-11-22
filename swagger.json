@@ -484,7 +484,7 @@
                 }
             }
         },
-        "/desinations/{id}": {
+        "/destinations/{id}": {
             "get": {
                 "tags": ["destinations"],
                 "summary": "Get one destination by id number",

@@ -1,0 +1,103 @@
+### Swagger Docs
+GET http://localhost:3000/api-docs
+
+### Get all users
+GET http://localhost:3000/users/
+
+### Create a new user
+POST http://localhost:3000/users/
+Content-Type: application/json
+
+{
+  "userName": "yourusername",
+  "firstName": "Joseph",
+  "lastName": "Smith",
+  "email": "joesmith@byui.edu",
+  "password": "mypassword"
+}
+
+### Get user by username
+GET http://localhost:3000/users/{username}
+
+### Update user by username
+PUT http://localhost:3000/users/{username}
+Content-Type: application/json
+
+{
+  "firstName": "JospehUpdated",
+  "lastName": "Smith",
+  "email": "joesmith@byui.edu"
+}
+
+### Delete user by username
+DELETE http://localhost:3000/users/{username}
+
+### TRIPS API ###
+### Get all trips
+GET http://localhost:3000/trips/
+
+### Create a new trip
+POST http://localhost:3000/trips/
+Content-Type: application/json
+
+{
+  "userName": "yourusernamae",
+  "tripTitle": "Ex: Anniversary Trip",
+  "startDate": "01/01/2030",
+  "endDate": "01/10/2030",
+  "description": "Vacation!",
+  "totalCost": 2000
+}
+
+### Get trip by ID
+GET http://localhost:3000/trips/{id}
+
+### Update trip by ID
+PUT http://localhost:3000/trips/{id}
+Content-Type: application/json
+{
+  "tripTitle": "Updated Trip Title"
+}
+
+### Delete trip by ID
+DELETE http://localhost:3000/trips/{id}
+
+### Destinations API ###
+
+### Get all destinations
+GET http://localhost:3000/destinations/
+
+### Create a new destination
+POST http://localhost:3000/destinations/
+Content-Type: application/json
+
+{
+  "tripTitle": "Anniversary Trip",
+  "locationName": "Cancun",
+  "notes": ["Beach", "Relax"]
+}
+
+### Get destination by ID
+GET http://localhost:3000/destinations/{id}
+
+
+### Activity API ###
+
+### Get all activities
+GET http://localhost:3000/activities/
+
+### Create a new activity
+POST http://localhost:3000/activities/
+Content-Type: application/json
+
+{
+  "tripTitle": "Anniversary Trip",
+  "locationName": "Cancun",
+  "activityName": "Parasailing",
+  "date": "01/01/2030",
+  "time": "2:00 PM EST",
+  "cost": 120
+}
+
+### Get activity by ID
+GET http://localhost:3000/activities/{id}
