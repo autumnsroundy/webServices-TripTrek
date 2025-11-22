@@ -1,0 +1,716 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "TripTrek",
+        "description": "Travel Planning API",
+        "version": "1.0.0",
+        "contact": [
+            {
+                "groupMember": "Autumn Roundy",
+                "email": "rou24001@byui.edu"
+            },
+            {
+                "groupMember": "Emily Lemmon",
+                "email": "lem19012@byui.edu"
+            },
+            {
+                "groupMember": "Melony Valencia",
+                "email": "val18018@byui.edu"
+            }
+        ]
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "users",
+            "description": "Operations related to users"
+        },
+        {
+            "name": "trips",
+            "description": "Operations related to trips"
+        },
+        {
+            "name": "destinations",
+            "description": "Operations related to destinations"
+        },
+        {
+            "name": "activities",
+            "description": "Operations related to activities"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "components": {
+        "schema": {
+            "users": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "72f44897f74b832d18a26419"
+                    },
+                    "userName": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "firstName": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "string@email.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "string"
+                    }
+                }
+            },
+            "trips": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "72f44897f74b832d18a26419"
+                    },
+                    "userName": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "tripTitle": {
+                        "type": "string",
+                        "example": "10th Anniversary Trip"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "example": "01/01/2001"
+                    },
+                    "endDate": {
+                        "type": "string",
+                        "example": "01/10/2001"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "7 day getaway to Mexico."
+                    },
+                    "totalCost": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "notes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "destinations": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "72f44897f74b832d18a26419"
+                    },
+                    "tripTitle": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "locationName": {
+                        "type": "string",
+                        "example": "Cancun, Mexico"
+                    },
+                    "notes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "activities": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "72f44897f74b832d18a26419"
+                    },
+                    "tripTitle": {
+                        "type": "string",
+                        "example": "string"
+                    },
+                    "locationName": {
+                        "type": "string",
+                        "example": "Cancun, Mexico"
+                    },
+                    "activityName": {
+                        "type": "string",
+                        "example": "Parasailing"
+                    },
+                    "date": {
+                        "type": "string",
+                        "example": "01/01/2001"
+                    },
+                    "time": {
+                        "type": "string",
+                        "example": "2:00pm EST"
+                    },
+                    "cost": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/api-docs": {
+            "get": {
+                "description": "",
+                "responses": {
+                    "default": {
+                    "description": ""
+                    }
+                }
+            }
+        },
+        "/users/": {
+            "get": {
+                "tags": ["users"],
+                "summary": "Get all users",
+                "description": "This is to get all the users currently in the database",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["users"],
+                "summary": "Create new user",
+                "description": "This is to create a new user in the database",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/components/schema/users"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created new user"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        }, 
+        "/users/{username}": {
+            "get": {
+                "tags": ["users"],
+                "summary": "Get user by username",
+                "description": "The name that is being fetched",
+                "produces": [
+                "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "The specified username is invalid."
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["users"],
+                "summary": "Update user",
+                "description": "This is to edit a user - can only be used by the logged in user.",
+                "parameters": [
+                    {
+                        "name": "username", 
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schema/users"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful updated user"
+                    },
+                    "400": {
+                        "description": "The specified username is invalid."
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["users"],
+                "summary": "Delete one user",
+                "description": "This is to delete a single user out of the database",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deletion successful"
+                    },
+                    "400": {
+                        "description": "The specified username is invalid."
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
+        "/trips/": {
+            "get": {
+                "tags": ["trips"],
+                "summary": "Get all trips",
+                "description": "This is to get all the trips in the database.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags":["trips"],
+                "summary": "Create new trip",
+                "description": "This is to create a new trip in the database",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/components/schema/trips"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created new trip"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
+        "/trips/{id}": {
+            "get": {
+                "tags": ["trips"],
+                "summary": "Get one trip by id number",
+                "description": "This is to get one of the trips currently in the database",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "The specified trip ID is invalid."
+                    },
+                    "404": {
+                        "description": "Trip not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "put": {
+                "tags":["trips"],
+                "summary": "Edit one trip",
+                "description":"This is to edit one of the trips currently in the database",
+                "parameters": [
+                    {
+                        "name": "id", 
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schema/trips"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "The specified trip ID is invalid."
+                    },
+                    "404": {
+                        "description": "Trip not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["trips"],
+                "summary": "Delete one trip",
+                "description": "This is to delete one of the trips currently in the database",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deletion Successful"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
+        "/destinations/": {
+            "get": {
+                "tags": ["destinations"],
+                "summary": "Get all destinations",
+                "description": "This is to get all the destinations in the database.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags":["destinations"],
+                "summary": "Create new destination",
+                "description": "This is to create a new destination in the database",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/components/schema/destinations"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created new destination"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
+        "/desinations/{id}": {
+            "get": {
+                "tags": ["destinations"],
+                "summary": "Get one destination by id number",
+                "description": "This is to get one of the destinations currently in the database",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "The specified destination ID is invalid."
+                    },
+                    "404": {
+                        "description": "Destination not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "put": {
+                "tags":["destinations"],
+                "summary": "Edit one destination",
+                "description":"This is to edit one of the destinations currently in the database",
+                "parameters": [
+                    {
+                        "name": "id", 
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schema/destinations"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "The specified destination ID is invalid."
+                    },
+                    "404": {
+                        "description": "Destination not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["destinations"],
+                "summary": "Delete destination by ID",
+                "description": "This is to delete one of destinations currently in the database",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deletion Successful"
+                    },
+                    "400": {
+                        "description": "The specified destination ID is invalid."
+                    },
+                    "404": {
+                        "description": "Destination not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
+        "/activities/": {
+            "get": {
+                "tags": ["activities"],
+                "summary": "Get all activities",
+                "description": "This is to get all the activities in the database.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags":["activities"],
+                "summary": "Create new activities",
+                "description": "This is to create a new activity in the database",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/components/schema/activities"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created new activity"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
+        "/activities/{id}": {
+            "get": {
+                "tags": ["activities"],
+                "summary": "Get one activity by id number",
+                "description": "This is to get one of the activities currently in the database",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "The specified activities ID is invalid."
+                    },
+                    "404": {
+                        "description": "Activity not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "put": {
+                "tags":["activities"],
+                "summary": "Edit one activity",
+                "description":"This is to edit one of the activities currently in the database",
+                "parameters": [
+                    {
+                        "name": "id", 
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schema/activities"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "The specified activities ID is invalid."
+                    },
+                    "404": {
+                        "description": "Activity not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["activities"],
+                "summary": "Delete activities by ID",
+                "description": "This is to delete one of activities currently in the database",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deletion Successful"
+                    },
+                    "400": {
+                        "description": "The specified activities ID is invalid."
+                    },
+                    "404": {
+                        "description": "Activity not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        }
+    }
+}
