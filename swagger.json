@@ -19,7 +19,7 @@
             }
         ]
     },
-    "host": "webservices-triptrek-xyex.onrender.com/",
+    "host": "webservices-triptrek-xyex.onrender.com",
     "basePath": "/",
     "tags": [
         { "name": "users", "description": "Operations related to users" },
@@ -27,7 +27,7 @@
         { "name": "destinations", "description": "Operations related to destinations" },
         { "name": "activities", "description": "Operations related to activities" }
     ],
-    "schemes": ["http"],
+    "schemes": ["https", "http"],
     "components": {
         "schema": {
             "users": {
