@@ -60,18 +60,10 @@ const tripSchema = new mongoose.Schema({
 
 // Destination Schema
 const destinationSchema = new mongoose.Schema({
-  tripTitle: {
-    type: String,
-    required: true,
-    ref: 'Trip'
-  },
-  locationName: {
-    type: String,
-    required: true,
-    trim: true
-  },
+  tripTitle: { type: String, required: true },
+  locationName: { type: String },  // ← required: false
   notes: [String]
-}, { timestamps: true });
+});
 
 // Activity Schema
 const activitySchema = new mongoose.Schema({
