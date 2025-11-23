@@ -1,7 +1,22 @@
 const router = require('express').Router();
 const { User } = require('../models/models');
 
-// Get all users
+/* ---------- Helper: validar body ---------- */
+function validateUserBody(body) {
+  if (!body || Object.keys(body).length === 0) {
+    return "Request body cannot be empty.";
+  }
+
+  if (!body.userName) return "userName is required.";
+  if (!body.firstName) return "firstName is required.";
+  if (!body.lastName) return "lastName is required.";
+  if (!body.email) return "email is required.";
+  if (!body.password) return "password is required.";
+
+  return null; // válido
+}
+
+/* ---------- Get all users ---------- */
 router.get('/', async (req, res) => {
   try {
     const users = await User.find();
@@ -11,8 +26,13 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create a new user
+/* ---------- Create a new user ---------- */
 router.post('/', async (req, res) => {
+  const validationError = validateUserBody(req.body);
+  if (validationError) {
+    return res.status(400).json({ message: validationError });
+  }
+
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -21,7 +41,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Get user by username
+/* ---------- Get user by username ---------- */
 router.get('/:username', async (req, res) => {
   try {
     const user = await User.findOne({ userName: req.params.username });
@@ -32,23 +52,32 @@ router.get('/:username', async (req, res) => {
   }
 });
 
-// Update user by username
+/* ---------- Update user by username ---------- */
 router.put('/:username', async (req, res) => {
+  const validationError = validateUserBody(req.body);
+  if (validationError) {
+    return res.status(400).json({ message: validationError });
+  }
+
   try {
-    const user = await User.findOneAndUpdate({ userName: req.params.username }, req.body, { new: true });
+    const user = await User.findOneAndUpdate(
+      { userName: req.params.username },
+      req.body,
+      { new: true }
+    );
     if (!user) return res.status(404).json({ message: 'User not found' });
-    res.status(204).json(user);
+    res.status(200).json(user);
   } catch (err) {
     res.status(400).json({ message: 'Invalid username', error: err.message });
   }
 });
 
-// Delete user by username
+/* ---------- Delete user by username ---------- */
 router.delete('/:username', async (req, res) => {
   try {
     const user = await User.findOneAndDelete({ userName: req.params.username });
     if (!user) return res.status(404).json({ message: 'User not found' });
-    res.status(204).json({ message: 'Deletion Successful' });
+    res.status(200).json({ message: 'Deletion Successful' });
   } catch (err) {
     res.status(400).json({ message: 'Invalid username', error: err.message });
   }
