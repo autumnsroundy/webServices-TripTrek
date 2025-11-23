@@ -19,7 +19,7 @@
             }
         ]
     },
-    "host": "localhost:3000",
+    "host": "webservices-triptrek-xyex.onrender.com/",
     "basePath": "/",
     "tags": [
         { "name": "users", "description": "Operations related to users" },
