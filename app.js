@@ -1,12 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 
-// === Import routers ===
-const usersRouter = require('./routes/users');
-const tripsRouter = require('./routes/trips');
-const destinationsRouter = require('./routes/destinations');
-const activitiesRouter = require('./routes/activities');
-
 // === Swagger ===
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
@@ -19,10 +13,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/users', usersRouter);
-app.use('/trips', tripsRouter);
-app.use('/destinations', destinationsRouter);
-app.use('/activities', activitiesRouter);
+app.use('/', require('./routes/index'));
 
 // Basic routes
 app.get('/', (req, res) => {
