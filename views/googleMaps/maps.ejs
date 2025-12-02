@@ -1,0 +1,8 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<h2>Need a little help knowing where to go? Start here! You have the whole world at your fingertips.</h2>
+<div id="map" style="height: 400px; width: 100%;"></div>
