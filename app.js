@@ -54,6 +54,17 @@ app.use((req, res) => {
 
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
+// Agrega esta ruta para debug
+app.get('/debug-api-key', (req, res) => {
+  res.json({
+    keyPresent: !!process.env.GOOGLE_MAPS_API_KEY,
+    keyLength: process.env.GOOGLE_MAPS_API_KEY?.length || 0,
+    keyStartsWith: process.env.GOOGLE_MAPS_API_KEY?.substring(0, 6) || 'none',
+    environment: process.env.NODE_ENV || 'development',
+    renderUrl: 'https://webservices-triptrek-xyex.onrender.com'
+  });
+});
+
 /* ***********************
 * Express Error Handler
 * Place after all other middleware
