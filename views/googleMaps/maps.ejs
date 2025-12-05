@@ -1,8 +1,63 @@
-<% if (title) { %>
-<h1><%= title %></h1>
-<% } else {
-  res.redirect('/')
-} %>
+<!-- Elimina el if/else complicado y usa esto: -->
+<% if (!title) { %>
+  <script>window.location.href = '/'</script>
+<% } %>
 
-<h2>Need a little help knowing where to go? Start here! You have the whole world at your fingertips.</h2>
-<div id="map" style="height: 400px; width: 100%;"></div>
+<div class="container mt-4">
+  <h1 class="text-center"><%= title %></h1>
+  
+  <div class="text-center mb-4">
+    <p class="lead">Need a little help knowing where to go? Start here! You have the whole world at your fingertips.</p>
+  </div>
+  
+  <!-- 🔥 SOLO UN div#map -->
+  <div id="map" 
+       style="height: 500px; width: 100%; 
+              border: 2px solid #4a90e2; 
+              border-radius: 10px; 
+              margin: 20px 0;">
+  </div>
+  
+  <div class="alert alert-info mt-3" role="alert">
+    <small>📍 Showing BYU-Idaho Campus as example location</small>
+  </div>
+</div>
+
+<script>
+  function initMap() {
+    // Coordenadas de BYU-Idaho
+    const byui = { lat: 43.817, lng: -111.783 };
+    
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 15,
+      center: byui,
+      mapTypeId: 'roadmap',
+      mapTypeControl: true,
+      streetViewControl: true,
+      fullscreenControl: true
+    });
+    
+    new google.maps.Marker({
+      position: byui,
+      map: map,
+      title: "BYU-Idaho Campus",
+      animation: google.maps.Animation.DROP
+    });
+  }
+  
+  // Manejo de errores
+  function gm_authFailure() {
+    document.getElementById('map').innerHTML = 
+      '<div class="alert alert-danger text-center p-4">' +
+      '⚠️ Google Maps failed to load. Please check your API key and restrictions.' +
+      '</div>';
+    console.error('Google Maps authentication failed');
+  }
+</script>
+
+<!-- 🔥 CONEXIÓN CONSISTENTE - MISMO NOMBRE QUE EN EL CONTROLLER -->
+<script 
+  src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsApiKey %>&callback=initMap"
+  async 
+  defer>
+</script>

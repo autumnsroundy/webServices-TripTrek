@@ -17,6 +17,9 @@ const mapsController = require('./controllers/mapsController');
 // === Middleware ===
 app.use(cors());
 app.use(express.json());
+
+app.locals.googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+
 // Express Messages Middleware
 app.use(require('connect-flash')());
 app.use(function(req, res, next){
@@ -45,9 +48,12 @@ app.get('/health', (req, res) => {
 
 // 404 handler
 app.use((req, res) => {
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  res.status(404).json({ error: 'Route not found A' });
+  console.error(`404 Error at: "${req.originalUrl}"`) 
+  res.status(404).json({ error: 'Route not found' });
 });
+
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 /* ***********************
 * Express Error Handler
 * Place after all other middleware

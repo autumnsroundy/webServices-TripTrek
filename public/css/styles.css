@@ -39,28 +39,117 @@ footer {
 /***** main ******/
 body {
     height: 100%;
-    background-color: #F8EBD8;
-    font-family:'Lato', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8ebd8;
+    font-family: "Playfair Display", serif;
 }
 
 .page-body {
     padding: 12px;
 }
-h1 {
-  margin: 1em;
+
+h1,
+h2,
+h3,
+.display-1,
+.display-2 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
 }
 
 /****** navigation ******/
 nav ul {
-  list-style: none;
-  padding: 7px;
-  display: flex;
-  justify-content: space-around;
-  margin: 5px;  
-  background-color: #264653;
+    list-style: none;
+    padding: 7px;
+    display: flex;
+    justify-content: space-around;
+    margin: 5px;
+    background-color: #264653;
 }
 nav a {
-  color: #F8EBD8;
-  text-align: center;
-  text-decoration: none;
+    color: #f8ebd8;
+    text-align: center;
+    text-decoration: none;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #264653 0%, #264653 100%);
+    color: white;
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80")
+        no-repeat center center/cover;
+    opacity: 0.2;
+}
+
+.feature-card {
+    border: none;
+    border-radius: 15px;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.feature-icon i {
+    font-size: 30px;
+    color: white;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(58, 134, 255, 0.3);
+}
+
+.cta-section {
+    background: linear-gradient(135deg, #2A9D8F 0%, #C44536 100%);
+    color: white;
+    border-radius: 20px;
+}
+
+#homeMap {
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 5px solid white;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
