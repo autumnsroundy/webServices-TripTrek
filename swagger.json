@@ -1,364 +1,208 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "title": "TripTrek",
-        "description": "Travel Planning API",
-        "version": "1.0.0",
-        "contact": [
-            {
-                "groupMember": "Autumn Roundy",
-                "email": "rou24001@byui.edu"
-            },
-            {
-                "groupMember": "Emily Lemmon",
-                "email": "lem19012@byui.edu"
-            },
-            {
-                "groupMember": "Melany Valencia",
-                "email": "val18018@byui.edu"
-            }
-        ]
-    },
-    "host": "webservices-triptrek-xyex.onrender.com",
-    "basePath": "/",
-    "tags": [
-        { "name": "users", "description": "Operations related to users" },
-        { "name": "trips", "description": "Operations related to trips" },
-        { "name": "destinations", "description": "Operations related to destinations" },
-        { "name": "activities", "description": "Operations related to activities" }
-    ],
-    "schemes": ["https", "http"],
-    "components": {
-        "schema": {
-            "users": {
-                "type": "object",
-                "properties": {
-                    "_id": { "type": "string" },
-                    "userName": { "type": "string" },
-                    "firstName": { "type": "string" },
-                    "lastName": { "type": "string" },
-                    "email": { "type": "string" },
-                    "password": { "type": "string" }
-                }
-            },
-            "trips": {
-                "type": "object",
-                "properties": {
-                    "_id": { "type": "string" },
-                    "userName": { "type": "string" },
-                    "tripTitle": { "type": "string" },
-                    "startDate": { "type": "string" },
-                    "endDate": { "type": "string" },
-                    "description": { "type": "string" },
-                    "totalCost": { "type": "integer" },
-                    "notes": { "type": "array", "items": { "type": "string" } }
-                }
-            },
-            "destinations": {
-                "type": "object",
-                "properties": {
-                    "_id": { "type": "string" },
-                    "tripTitle": { "type": "string" },
-                    "locationName": { "type": "string" },
-                    "notes": { "type": "array", "items": { "type": "string" } }
-                }
-            },
-            "activities": {
-                "type": "object",
-                "properties": {
-                    "_id": { "type": "string" },
-                    "tripTitle": { "type": "string" },
-                    "locationName": { "type": "string" },
-                    "activityName": { "type": "string" },
-                    "date": { "type": "string" },
-                    "time": { "type": "string" },
-                    "cost": { "type": "integer" }
-                }
-            }
-        }
-    },
-    "paths": {
-
-        "/users/": {
-            "get": {
-                "tags": ["users"],
-                "summary": "Get all users",
-                "produces": ["application/json"],
-                "responses": {
-                    "200": { "description": "Successful operation" },
-                    "500": { "description": "Server error" }
-                }
-            },
-            "post": {
-                "tags": ["users"],
-                "summary": "Create new user",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": { "$ref": "#/components/schema/users" }
-                    }
-                ],
-                "responses": {
-                    "201": { "description": "Successfully created new user" },
-                    "500": { "description": "Server error" }
-                }
-            }
-        },
-
-        "/users/{username}": {
-            "get": {
-                "tags": ["users"],
-                "summary": "Get user by username",
-                "parameters": [
-                    { "name": "username", "in": "path", "required": true, "type": "string" }
-                ],
-                "responses": {
-                    "200": { "description": "Successful operation" },
-                    "400": { "description": "Invalid username" },
-                    "404": { "description": "User not found" }
-                }
-            },
-            "put": {
-                "tags": ["users"],
-                "summary": "Update user",
-                "parameters": [
-                    { "name": "username", "in": "path", "required": true, "type": "string" },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": { "$ref": "#/components/schema/users" }
-                    }
-                ],
-                "responses": {
-                    "200": { "description": "User updated successfully" },
-                    "400": { "description": "Invalid username" },
-                    "404": { "description": "User not found" }
-                }
-            },
-            "delete": {
-                "tags": ["users"],
-                "summary": "Delete user",
-                "parameters": [
-                    { "name": "username", "in": "path", "required": true, "type": "string" }
-                ],
-                "responses": {
-                    "200": { "description": "User deleted successfully" },
-                    "400": { "description": "Invalid username" },
-                    "404": { "description": "User not found" }
-                }
-            }
-        },
-
-        "/trips/": {
-            "get": {
-                "tags": ["trips"],
-                "summary": "Get all trips",
-                "responses": {
-                    "200": { "description": "Successful operation" },
-                    "500": { "description": "Server error" }
-                }
-            },
-            "post": {
-                "tags": ["trips"],
-                "summary": "Create new trip",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": { "$ref": "#/components/schema/trips" }
-                    }
-                ],
-                "responses": {
-                    "201": { "description": "Successfully created new trip" },
-                    "500": { "description": "Server error" }
-                }
-            }
-        },
-
-        "/trips/{id}": {
-            "get": {
-                "tags": ["trips"],
-                "summary": "Get trip by ID",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" }
-                ],
-                "responses": {
-                    "200": { "description": "Successful operation" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Trip not found" }
-                }
-            },
-            "put": {
-                "tags": ["trips"],
-                "summary": "Update trip",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": { "$ref": "#/components/schema/trips" }
-                    }
-                ],
-                "responses": {
-                    "200": { "description": "Trip updated successfully" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Trip not found" }
-                }
-            },
-            "delete": {
-                "tags": ["trips"],
-                "summary": "Delete trip",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" }
-                ],
-                "responses": {
-                    "200": { "description": "Trip deleted successfully" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Trip not found" }
-                }
-            }
-        },
-
-        "/destinations/": {
-            "get": {
-                "tags": ["destinations"],
-                "summary": "Get all destinations",
-                "responses": {
-                    "200": { "description": "Successful operation" },
-                    "500": { "description": "Server error" }
-                }
-            },
-            "post": {
-                "tags": ["destinations"],
-                "summary": "Create destination",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": { "$ref": "#/components/schema/destinations" }
-                    }
-                ],
-                "responses": {
-                    "201": { "description": "Successfully created new destination" },
-                    "500": { "description": "Server error" }
-                }
-            }
-        },
-
-        "/destinations/{id}": {
-            "get": {
-                "tags": ["destinations"],
-                "summary": "Get destination by ID",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" }
-                ],
-                "responses": {
-                    "200": { "description": "Successful operation" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Destination not found" }
-                }
-            },
-            "put": {
-                "tags": ["destinations"],
-                "summary": "Update destination",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": { "$ref": "#/components/schema/destinations" }
-                    }
-                ],
-                "responses": {
-                    "200": { "description": "Destination updated successfully" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Destination not found" }
-                }
-            },
-            "delete": {
-                "tags": ["destinations"],
-                "summary": "Delete destination",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" }
-                ],
-                "responses": {
-                    "200": { "description": "Destination deleted successfully" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Destination not found" }
-                }
-            }
-        },
-
-        "/activities/": {
-            "get": {
-                "tags": ["activities"],
-                "summary": "Get all activities",
-                "responses": {
-                    "200": { "description": "Successful operation" },
-                    "500": { "description": "Server error" }
-                }
-            },
-            "post": {
-                "tags": ["activities"],
-                "summary": "Create activity",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": { "$ref": "#/components/schema/activities" }
-                    }
-                ],
-                "responses": {
-                    "201": { "description": "Successfully created new activity" },
-                    "500": { "description": "Server error" }
-                }
-            }
-        },
-
-        "/activities/{id}": {
-            "get": {
-                "tags": ["activities"],
-                "summary": "Get activity by ID",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" }
-                ],
-                "responses": {
-                    "200": { "description": "Successful operation" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Activity not found" }
-                }
-            },
-            "put": {
-                "tags": ["activities"],
-                "summary": "Update activity",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": { "$ref": "#/components/schema/activities" }
-                    }
-                ],
-                "responses": {
-                    "200": { "description": "Activity updated successfully" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Activity not found" }
-                }
-            },
-            "delete": {
-                "tags": ["activities"],
-                "summary": "Delete activity",
-                "parameters": [
-                    { "name": "id", "in": "path", "required": true, "type": "string" }
-                ],
-                "responses": {
-                    "200": { "description": "Activity deleted successfully" },
-                    "400": { "description": "Invalid ID" },
-                    "404": { "description": "Activity not found" }
-                }
-            }
-        }
+  "swagger": "2.0",
+  "info": {
+    "title": "TripTrek API",
+    "version": "1.0.0",
+    "description": "Travel Planning API with per-user access",
+    "contact": [
+      { "name": "Autumn Roundy", "email": "rou24001@byui.edu" },
+      { "name": "Emily Lemmon", "email": "lem19012@byui.edu" },
+      { "name": "Melany Valencia", "email": "val18018@byui.edu" }
+    ]
+  },
+  "schemes": ["http", "https"],
+  "basePath": "/",
+  "tags": [
+    { "name": "users", "description": "Operations related to users" },
+    { "name": "trips", "description": "Operations related to trips" },
+    { "name": "destinations", "description": "Operations related to destinations" },
+    { "name": "activities", "description": "Operations related to activities" }
+  ],
+  "securityDefinitions": {
+    "sessionAuth": {
+      "type": "apiKey",
+      "name": "connect.sid",
+      "in": "cookie"
     }
+  },
+  "components": {
+    "schema": {
+      "users": {
+        "type": "object",
+        "properties": {
+          "googleId": { "type": "string" },
+          "userName": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "trips": {
+        "type": "object",
+        "properties": {
+          "userId": { "type": "string" },
+          "tripTitle": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "description": { "type": "string" },
+          "totalCost": { "type": "integer" },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "destinations": {
+        "type": "object",
+        "required": ["userName", "tripTitle", "locationName"],
+        "properties": {
+          "userName": { "type": "string", "example": "Autumn Roundy" },
+          "tripTitle": { "type": "string", "example": "Honeymoon" },
+          "locationName": { "type": "string", "example": "Machu Picchu" },
+          "notes": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["Climb Huayna Picchu", "Bring water and snacks"]
+          }
+        }
+      },
+      "activities": {
+        "type": "object",
+        "required": ["userName", "tripTitle", "activityName"],
+        "properties": {
+          "userName": { "type": "string", "example": "Autumn Roundy" },
+          "tripTitle": { "type": "string", "example": "Honeymoon" },
+          "locationName": { "type": "string", "example": "Cusco" },
+          "activityName": { "type": "string", "example": "City Tour" },
+          "date": { "type": "string", "example": "2025-10-12" },
+          "time": { "type": "string", "example": "09:00" },
+          "cost": { "type": "integer", "example": 75 }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get all users",
+        "security": [{ "sessionAuth": [] }],
+        "responses": {
+          "200": { "description": "Successful operation" },
+          "401": { "description": "Unauthorized" },
+          "500": { "description": "Server error" }
+        }
+      },
+      "post": {
+        "tags": ["users"],
+        "summary": "Create new user",
+        "parameters": [
+          { "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/components/schema/users" } }
+        ],
+        "responses": {
+          "201": { "description": "Successfully created new user" },
+          "500": { "description": "Server error" }
+        }
+      }
+    },
+    "/api/users/{username}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get user by username",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [{ "name": "username", "in": "path", "required": true, "type": "string" }],
+        "responses": {
+          "200": { "description": "Successful operation" },
+          "400": { "description": "Invalid username" },
+          "404": { "description": "User not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "put": {
+        "tags": ["users"],
+        "summary": "Update user",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [
+          { "name": "username", "in": "path", "required": true, "type": "string" },
+          { "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/components/schema/users" } }
+        ],
+        "responses": {
+          "200": { "description": "User updated successfully" },
+          "400": { "description": "Invalid username" },
+          "404": { "description": "User not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Delete user",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [{ "name": "username", "in": "path", "required": true, "type": "string" }],
+        "responses": {
+          "200": { "description": "User deleted successfully" },
+          "400": { "description": "Invalid username" },
+          "404": { "description": "User not found" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/trips": {
+      "get": {
+        "tags": ["trips"],
+        "summary": "Get trips for logged-in user",
+        "security": [{ "sessionAuth": [] }],
+        "responses": { "200": { "description": "Successful operation" }, "401": { "description": "Unauthorized" } }
+      },
+      "post": {
+        "tags": ["trips"],
+        "summary": "Create new trip",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [{ "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/components/schema/trips" } }],
+        "responses": { "201": { "description": "Successfully created trip" }, "401": { "description": "Unauthorized" } }
+      }
+    },
+    "/api/trips/{id}": {
+      "get": {
+        "tags": ["trips"],
+        "summary": "Get trip by ID",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
+        "responses": { "200": { "description": "Success" }, "404": { "description": "Trip not found" }, "401": { "description": "Unauthorized" } }
+      },
+      "put": {
+        "tags": ["trips"],
+        "summary": "Update trip",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
+          { "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/components/schema/trips" } }
+        ],
+        "responses": { "200": { "description": "Trip updated" }, "403": { "description": "Forbidden" }, "404": { "description": "Not found" }, "401": { "description": "Unauthorized" } }
+      },
+      "delete": {
+        "tags": ["trips"],
+        "summary": "Delete trip",
+        "security": [{ "sessionAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
+        "responses": { "200": { "description": "Trip deleted" }, "403": { "description": "Forbidden" }, "404": { "description": "Not found" }, "401": { "description": "Unauthorized" } }
+      }
+    },
+    "/api/destinations": {
+      "get": { "tags": ["destinations"], "summary": "Get destinations", "security": [{ "sessionAuth": [] }], "responses": { "200": { "description": "Success" }, "401": { "description": "Unauthorized" } } },
+      "post": { "tags": ["destinations"], "summary": "Create destination", "security": [{ "sessionAuth": [] }], "parameters": [{ "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/components/schema/destinations" } }], "responses": { "201": { "description": "Created" }, "401": { "description": "Unauthorized" } } }
+    },
+    "/api/destinations/{id}": {
+      "get": { "tags": ["destinations"], "summary": "Get destination by ID", "security": [{ "sessionAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }], "responses": { "200": { "description": "Success" }, "404": { "description": "Not found" }, "401": { "description": "Unauthorized" } } },
+      "put": { "tags": ["destinations"], "summary": "Update destination", "security": [{ "sessionAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }, { "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/components/schema/destinations" } }], "responses": { "200": { "description": "Updated" }, "403": { "description": "Forbidden" }, "401": { "description": "Unauthorized" } } },
+      "delete": { "tags": ["destinations"], "summary": "Delete destination", "security": [{ "sessionAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }], "responses": { "200": { "description": "Deleted" }, "403": { "description": "Forbidden" }, "401": { "description": "Unauthorized" } } }
+    },
+    "/api/activities": {
+      "post": { "tags": ["activities"], "summary": "Create activity", "security": [{ "sessionAuth": [] }], "parameters": [{ "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/components/schema/activities" } }], "responses": { "201": { "description": "Created" }, "401": { "description": "Unauthorized" }, "403": { "description": "Forbidden" } } }
+    },
+    "/api/activities/{tripId}": {
+      "get": { "tags": ["activities"], "summary": "Get activities for trip", "security": [{ "sessionAuth": [] }], "parameters": [{ "name": "tripId", "in": "path", "required": true, "type": "string" }], "responses": { "200": { "description": "Success" }, "403": { "description": "Forbidden" }, "401": { "description": "Unauthorized" } } }
+    },
+    "/api/activities/{id}": {
+      "put": { "tags": ["activities"], "summary": "Update activity", "security": [{ "sessionAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }, { "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/components/schema/activities" } }], "responses": { "200": { "description": "Updated" }, "403": { "description": "Forbidden" }, "401": { "description": "Unauthorized" } } },
+      "delete": { "tags": ["activities"], "summary": "Delete activity", "security": [{ "sessionAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }], "responses": { "200": { "description": "Deleted" }, "403": { "description": "Forbidden" }, "401": { "description": "Unauthorized" } } }
+    }
+  }
 }

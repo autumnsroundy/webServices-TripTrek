@@ -1,103 +1,95 @@
-### Swagger Docs
-GET http://localhost:3000/api-docs
-
-### Get all users
-GET http://localhost:3000/users/
-
-### Create a new user
-POST http://localhost:3000/users/
+### LOGIN USER
+POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
   "userName": "yourusername",
-  "firstName": "Joseph",
-  "lastName": "Smith",
-  "email": "joesmith@byui.edu",
   "password": "mypassword"
 }
 
+@after
+> {% client.globalSet("loggedIn", true) %}
+
+### USERS API ###
+### Get all users
+GET http://localhost:3000/api/users/
+
 ### Get user by username
-GET http://localhost:3000/users/{username}
+GET http://localhost:3000/api/users/yourusername
 
 ### Update user by username
-PUT http://localhost:3000/users/{username}
+PUT http://localhost:3000/api/users/yourusername
 Content-Type: application/json
 
 {
-  "firstName": "JospehUpdated",
+  "firstName": "JosephUpdated",
   "lastName": "Smith",
   "email": "joesmith@byui.edu"
 }
 
-### Delete user by username
-DELETE http://localhost:3000/users/{username}
-
 ### TRIPS API ###
-### Get all trips
-GET http://localhost:3000/trips/
+### Get all trips for logged-in user
+GET http://localhost:3000/api/trips/
+
+### Get trip by title (existing trip)
+GET http://localhost:3000/api/trips?tripTitle=Honeymoon&userName=yourusername
 
 ### Create a new trip
-POST http://localhost:3000/trips/
+POST http://localhost:3000/api/trips/
 Content-Type: application/json
 
 {
-  "userName": "yourusernamae",
-  "tripTitle": "Ex: Anniversary Trip",
+  "tripTitle": "Automation Test Trip",
   "startDate": "01/01/2030",
   "endDate": "01/10/2030",
-  "description": "Vacation!",
-  "totalCost": 2000
+  "description": "Trip created by automated test",
+  "totalCost": 1000
 }
 
-### Get trip by ID
-GET http://localhost:3000/trips/{id}
+@after
+> {% client.globalSet("tripId", response._id) %}
 
-### Update trip by ID
-PUT http://localhost:3000/trips/{id}
-Content-Type: application/json
-{
-  "tripTitle": "Updated Trip Title"
-}
+### DESTINATIONS API ###
+### Get all destinations for logged-in user
+GET http://localhost:3000/api/destinations/
 
-### Delete trip by ID
-DELETE http://localhost:3000/trips/{id}
-
-### Destinations API ###
-
-### Get all destinations
-GET http://localhost:3000/destinations/
+### Get destinations by tripTitle
+GET http://localhost:3000/api/destinations?tripTitle=Honeymoon&userName=yourusername
 
 ### Create a new destination
-POST http://localhost:3000/destinations/
+POST http://localhost:3000/api/destinations/
 Content-Type: application/json
 
 {
-  "tripTitle": "Anniversary Trip",
-  "locationName": "Cancun",
-  "notes": ["Beach", "Relax"]
+  "tripTitle": "Automation Test Trip",
+  "userName": "yourusername",
+  "locationName": "Test Beach",
+  "notes": ["Relax", "Fun"]
 }
 
-### Get destination by ID
-GET http://localhost:3000/destinations/{id}
+@after
+> {% client.globalSet("destinationId", response._id) %}
 
+### ACTIVITIES API ###
+### Get all activities for logged-in user
+GET http://localhost:3000/api/activities/
 
-### Activity API ###
-
-### Get all activities
-GET http://localhost:3000/activities/
+### Get activities by tripTitle
+GET http://localhost:3000/api/activities?tripTitle=Honeymoon&userName=yourusername
 
 ### Create a new activity
-POST http://localhost:3000/activities/
+POST http://localhost:3000/api/activities/
 Content-Type: application/json
 
 {
-  "tripTitle": "Anniversary Trip",
-  "locationName": "Cancun",
-  "activityName": "Parasailing",
-  "date": "01/01/2030",
-  "time": "2:00 PM EST",
-  "cost": 120
+  "tripTitle": "Automation Test Trip",
+  "userName": "yourusername",
+  "locationName": "Test Beach",
+  "activityName": "Test Parasailing",
+  "date": "01/02/2030",
+  "time": "10:00 AM",
+  "cost": 200
 }
 
-### Get activity by ID
-GET http://localhost:3000/activities/{id}
+@after
+> {% client.globalSet("activityId", response._id) %}

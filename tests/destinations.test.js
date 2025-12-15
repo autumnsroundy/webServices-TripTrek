@@ -1,8 +1,14 @@
 const request = require("supertest");
-const app = require("../app");
+const express = require("express");
+const destinationsRoutes = require("../routes/destinations");
+const mockAuth = require("./middleware/mockAuth");
+
+const app = express();
+app.use(express.json());
+app.use(mockAuth(global.mockUser));
+app.use("/destinations", destinationsRoutes);
 
 describe("Destinations API", () => {
-
   let destId;
   const testDestination = {
     tripTitle: "Anniversary Trip",
@@ -10,7 +16,7 @@ describe("Destinations API", () => {
     notes: ["Beach", "Relax"]
   };
 
-  it("GET /destinations → should return all destinations", async () => {
+  it("GET /destinations → should return destinations for logged-in user", async () => {
     const res = await request(app).get("/destinations/");
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -40,5 +46,4 @@ describe("Destinations API", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Deletion Successful");
   });
-
 });

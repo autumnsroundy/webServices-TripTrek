@@ -1,8 +1,22 @@
-<header id="top-header">
+<header id="top-header" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 1rem; background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0; position: sticky; top: 0; z-index: 1000;">
   <span class="siteName">
-    <a href="/" title="Return to home page">TripTrek</a>
+    <a href="/" title="Return to home page" style="text-decoration: none; font-weight: bold; font-size: 1.25rem; color: #333;">TripTrek</a>
   </span>
-  <div id="tools">
-    <a title="Click to log in" href="/">Login</a>
+  
+  <div id="tools" style="display: flex; align-items: center; gap: 0.5rem;">
+    <% if (!user) { %>
+      <!-- User not logged in -->
+      <a title="Click to log in" href="/auth/google" style="text-decoration: none; background-color: #dc3545; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; display: inline-flex; align-items: center;">
+        <i class="bi bi-google me-1"></i>Login
+      </a>
+    <% } else { %>
+      <!-- User logged in -->
+      <span class="user-name" style="font-weight: 500; color: #333; margin-right: 0.5rem;">
+        Hello, <%= user.firstName %> <%= user.lastName %>
+      </span>
+      <a title="Click to log out" href="/auth/logout" style="text-decoration: none; background-color: transparent; border: 1px solid #6c757d; color: #6c757d; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; display: inline-flex; align-items: center;">
+        Logout
+      </a>
+    <% } %>
   </div>
 </header>

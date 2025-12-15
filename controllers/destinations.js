@@ -1,80 +1,78 @@
-const { Destination } = require('../models/models');
+const { Destination, Trip } = require("../models/models");
 
-/* ---------- Helper: validar body de destination ---------- */
-function validateDestinationBody(body) {
-  if (!body || Object.keys(body).length === 0) {
-    return "Request body cannot be empty.";
-  }
-
-  if (!body.tripTitle) return "tripTitle is required.";
-  if (!body.locationName) return "locationName is required.";
-
-  // notes es opcional
-  return null;
-}
-
-const getAllDestinations = async (req, res) => {
+const getDestinations = async (req, res) => {
   try {
-    const destinations = await Destination.find();
+    const trips = await Trip.find({ userName: req.user.userName });
+    const tripTitles = trips.map(t => t.tripTitle);
+    const destinations = await Destination.find({ tripTitle: { $in: tripTitles } });
     res.json(destinations);
   } catch (err) {
-    res.status(500).json({ message: 'An error occurred', error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
-const getDestinationByID = async (req, res) => {
+const getDestinationById = async (req, res) => {
   try {
     const destination = await Destination.findById(req.params.id);
-    if (!destination) return res.status(404).json({ message: 'Destination not found' });
+    if (!destination) return res.status(404).json({ message: "Destination not found" });
+
+    const trip = await Trip.findOne({ tripTitle: destination.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
     res.json(destination);
   } catch (err) {
-    res.status(400).json({ message: 'Invalid destination ID', error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
-const createNewDestination = async (req, res) => {
-  const validationError = validateDestinationBody(req.body);
-  if (validationError) {
-    return res.status(400).json({ message: validationError });
-  }
-
+const createDestination = async (req, res) => {
   try {
-    const destination = await Destination.create(req.body);
+    const trip = await Trip.findOne({ tripTitle: req.body.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
+    const destination = new Destination({
+      tripTitle: trip.tripTitle,
+      userName: req.user.userName,
+      locationName: req.body.locationName,
+      notes: req.body.notes || []
+    });
+
+    await destination.save();
     res.status(201).json(destination);
   } catch (err) {
-    res.status(500).json({ message: 'An error occurred', error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
 const updateDestination = async (req, res) => {
-  const validationError = validateDestinationBody(req.body);
-  if (validationError) {
-    return res.status(400).json({ message: validationError });
-  }
-
   try {
-    const destination = await Destination.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!destination) return res.status(404).json({ message: 'Destination not found' });
-    res.status(200).json(destination);
+    const destination = await Destination.findById(req.params.id);
+    if (!destination) return res.status(404).json({ message: "Destination not found" });
+
+    const trip = await Trip.findOne({ tripTitle: destination.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
+    Object.assign(destination, req.body);
+    await destination.save();
+    res.json(destination);
   } catch (err) {
-    res.status(400).json({ message: 'Invalid destination ID', error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
 const deleteDestination = async (req, res) => {
   try {
-    const destination = await Destination.findByIdAndDelete(req.params.id);
-    if (!destination) return res.status(404).json({ message: 'Destination not found' });
-    res.status(200).json({ message: 'Deletion Successful' });
+    const destination = await Destination.findById(req.params.id);
+    if (!destination) return res.status(404).json({ message: "Destination not found" });
+
+    const trip = await Trip.findOne({ tripTitle: destination.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
+    await destination.deleteOne();
+    res.json({ message: "Deletion Successful" });
   } catch (err) {
-    res.status(400).json({ message: 'Invalid destination ID', error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
-module.exports = {
-    getAllDestinations,
-    getDestinationByID,
-    createNewDestination,
-    updateDestination,
-    deleteDestination
-};
+module.exports = { getDestinations, getDestinationById, createDestination, updateDestination, deleteDestination };

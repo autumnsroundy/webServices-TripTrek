@@ -1,99 +1,82 @@
-const { Activity } = require('../models/models');
+const { Activity, Trip } = require("../models/models");
 
-/* ---------- Helper: validar body de activity ---------- */
-function validateActivityBody(body) {
-  if (!body || Object.keys(body).length === 0) {
-    return "Request body cannot be empty.";
-  }
-
-  if (!body.tripTitle) return "tripTitle is required.";
-  if (!body.locationName) return "locationName is required.";
-  if (!body.activityName) return "activityName is required.";
-  if (!body.date) return "date is required.";
-
-  return null; 
-};
-
-const getAllActivities = async (req, res) => {
+const getActivitiesByTrip = async (req, res) => {
   try {
-    const activities = await Activity.find();
+    const trip = await Trip.findOne({ tripTitle: req.params.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
+    const activities = await Activity.find({ tripTitle: trip.tripTitle });
     res.json(activities);
   } catch (err) {
-    res.status(500).json({ message: 'An error occurred', error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
-    
-const getActivityByID = async (req, res) => {
+
+const getActivityById = async (req, res) => {
   try {
     const activity = await Activity.findById(req.params.id);
-    if (!activity) return res.status(404).json({ message: 'Activity not found' });
+    if (!activity) return res.status(404).json({ message: "Activity not found" });
+
+    const trip = await Trip.findOne({ tripTitle: activity.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
     res.json(activity);
   } catch (err) {
-    res.status(400).json({ message: 'Invalid activity ID', error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
-const createNewActivity = async (req, res) => {
-  const validationError = validateActivityBody(req.body);
-  if (validationError) {
-    return res.status(400).json({ message: validationError });
-  }
-
+const createActivity = async (req, res) => {
   try {
-    const activity = await Activity.create(req.body);
+    const trip = await Trip.findOne({ tripTitle: req.body.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
+    const activity = new Activity({
+      tripTitle: trip.tripTitle,
+      userName: req.user.userName,
+      locationName: req.body.locationName,
+      activityName: req.body.activityName,
+      date: req.body.date,
+      time: req.body.time,
+      cost: req.body.cost
+    });
+
+    await activity.save();
     res.status(201).json(activity);
-
   } catch (err) {
-    // ⭐ Manejo del error de validación de Mongoose ⭐
-    if (err.name === "ValidationError") {
-      return res.status(400).json({
-        message: "Validation error",
-        details: err.errors
-      });
-    }
-
-    res.status(500).json({ message: 'An error occurred', error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
 const updateActivity = async (req, res) => {
-  const validationError = validateActivityBody(req.body);
-  if (validationError) {
-    return res.status(400).json({ message: validationError });
-  }
-
   try {
-    const activity = await Activity.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!activity) return res.status(404).json({ message: 'Activity not found' });
-    res.status(200).json(activity);
+    const activity = await Activity.findById(req.params.id);
+    if (!activity) return res.status(404).json({ message: "Activity not found" });
 
+    const trip = await Trip.findOne({ tripTitle: activity.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
+    Object.assign(activity, req.body);
+    await activity.save();
+    res.json(activity);
   } catch (err) {
-    // ⭐ igual que en POST, manejamos ValidationError ⭐
-    if (err.name === "ValidationError") {
-      return res.status(400).json({
-        message: "Validation error",
-        details: err.errors
-      });
-    }
-
-    res.status(400).json({ message: 'Invalid activity ID', error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
 const deleteActivity = async (req, res) => {
   try {
-    const activity = await Activity.findByIdAndDelete(req.params.id);
-    if (!activity) return res.status(404).json({ message: 'Activity not found' });
-    res.status(200).json({ message: 'Deletion Successful' });
+    const activity = await Activity.findById(req.params.id);
+    if (!activity) return res.status(404).json({ message: "Activity not found" });
+
+    const trip = await Trip.findOne({ tripTitle: activity.tripTitle, userName: req.user.userName });
+    if (!trip) return res.status(403).json({ message: "Forbidden" });
+
+    await activity.deleteOne();
+    res.json({ message: "Deletion Successful" });
   } catch (err) {
-    res.status(400).json({ message: 'Invalid activity ID', error: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
-module.exports = {
-    getAllActivities,
-    getActivityByID,
-    createNewActivity,
-    updateActivity,
-    deleteActivity
-};
+module.exports = { getActivitiesByTrip, getActivityById, createActivity, updateActivity, deleteActivity };

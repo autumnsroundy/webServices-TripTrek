@@ -1,10 +1,18 @@
-const router = require('express').Router();
-const activitiesController = require('../controllers/activities');
+const router = require("express").Router();
+const activitiesController = require("../controllers/activities");
 
-router.get('/', activitiesController.getAllActivities);
-router.get('/:id', activitiesController.getActivityByID);
-router.post('/', activitiesController.createNewActivity);
-router.put('/:id', activitiesController.updateActivity);
-router.delete('/:id', activitiesController.deleteActivity);
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.status(401).json({ message: "Unauthorized" });
+}
+
+// Protect all activity routes
+router.use(isAuthenticated);
+
+router.get("/:tripId", activitiesController.getActivitiesByTrip);
+router.get("/activity/:id", activitiesController.getActivityById);
+router.post("/", activitiesController.createActivity);
+router.put("/:id", activitiesController.updateActivity);
+router.delete("/:id", activitiesController.deleteActivity);
 
 module.exports = router;

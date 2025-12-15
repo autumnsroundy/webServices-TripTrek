@@ -1,104 +1,74 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// User Schema
-const userSchema = new mongoose.Schema({
-  userName: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
+// ---------------------
+// User Schema & Model
+// ---------------------
+const userSchema = new mongoose.Schema(
+  {
+    userName: { type: String, required: true, unique: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
   },
-  firstName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  lastName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true
-  }
-}, { timestamps: true });
+  { collection: "users", timestamps: true } // force lowercase collection
+);
 
-// Trip Schema
-const tripSchema = new mongoose.Schema({
-  userName: {
-    type: String,
-    required: true,
-    ref: 'User'
-  },
-  tripTitle: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  startDate: {
-    type: Date,
-    required: true
-  },
-  endDate: {
-    type: Date,
-    required: true
-  },
-  description: String,
-  totalCost: {
-    type: Number,
-    default: 0
-  },
-  notes: [String]
-}, { timestamps: true });
+const User = mongoose.model("User", userSchema);
 
-// Destination Schema
-const destinationSchema = new mongoose.Schema({
-  tripTitle: { type: String, required: true },
-  locationName: { type: String },  // ← required: false
-  notes: [String]
-});
-
-// Activity Schema
-const activitySchema = new mongoose.Schema({
-  tripTitle: {
-    type: String,
-    required: true,
-    ref: 'Trip'
+// ---------------------
+// Trip Schema & Model
+// ---------------------
+const tripSchema = new mongoose.Schema(
+  {
+    userName: { type: String, required: true },
+    tripTitle: { type: String, required: true },
+    startDate: { type: String, required: true },
+    endDate: { type: String, required: true },
+    description: String,
+    totalCost: Number
   },
-  locationName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  activityName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  date: {
-    type: Date,
-    required: true
-  },
-  time: String,
-  cost: {
-    type: Number,
-    default: 0
-  }
-}, { timestamps: true });
+  { collection: "trips", timestamps: true }
+);
 
+const Trip = mongoose.model("Trip", tripSchema);
 
-const User = mongoose.model('User', userSchema);
-const Trip = mongoose.model('Trip', tripSchema);
-const Destination = mongoose.model('Destination', destinationSchema);
-const Activity = mongoose.model('Activity', activitySchema);
+// ---------------------
+// Destination Schema & Model
+// ---------------------
+const destinationSchema = new mongoose.Schema(
+  {
+    userName: { type: String, required: true },  // link to user
+    tripTitle: { type: String, required: true }, // link to trip
+    locationName: { type: String, required: true },
+    notes: [String] // array of strings for notes
+  },
+  { collection: "destinations", timestamps: true }
+);
 
+const Destination = mongoose.model("Destination", destinationSchema);
+
+// ---------------------
+// Activity Schema & Model
+// ---------------------
+const activitySchema = new mongoose.Schema(
+  {
+    userName: { type: String, required: true },   // link to user
+    tripTitle: { type: String, required: true },  // link to trip
+    locationName: String,
+    activityName: { type: String, required: true },
+    date: String,
+    time: String,
+    cost: Number
+  },
+  { collection: "activities", timestamps: true }
+);
+
+const Activity = mongoose.model("Activity", activitySchema);
+
+// ---------------------
+// Export all models
+// ---------------------
 module.exports = {
   User,
   Trip,

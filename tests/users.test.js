@@ -1,9 +1,14 @@
 const request = require("supertest");
-const app = require("../app");
+const express = require("express");
+const usersRoutes = require("../routes/users");
+const mockAuth = require("./middleware/mockAuth");
 
+const app = express();
+app.use(express.json());
+app.use(mockAuth(global.mockUser));
+app.use("/users", usersRoutes);
 
 describe("Users API", () => {
-
   const testUser = {
     userName: "testuser",
     firstName: "Joseph",
@@ -11,10 +16,6 @@ describe("Users API", () => {
     email: "joesmith@byui.edu",
     password: "mypassword"
   };
-  //create user before tests run
-  beforeAll(async () => {
-    await request(app).post("/users/").send(testUser);
-  });
 
   it("GET /users → should return all users", async () => {
     const res = await request(app).get("/users/");
@@ -47,5 +48,4 @@ describe("Users API", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Deletion Successful");
   });
-
 });

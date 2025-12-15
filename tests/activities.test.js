@@ -1,19 +1,25 @@
 const request = require("supertest");
-const app = require("../app");
+const express = require("express");
+const activitiesRoutes = require("../routes/activities");
+const mockAuth = require("./middleware/mockAuth");
+
+const app = express();
+app.use(express.json());
+app.use(mockAuth(global.mockUser));
+app.use("/activities", activitiesRoutes);
 
 describe("Activities API", () => {
-
   let activityId;
   const testActivity = {
     tripTitle: "Anniversary Trip",
     locationName: "Cancun",
     activityName: "Parasailing",
-    date: "01/01/2030",
+    date: "2030-01-01",
     time: "2:00 PM EST",
     cost: 120
   };
 
-  it("GET /activities → should return all activities", async () => {
+  it("GET /activities → should return activities for logged-in user", async () => {
     const res = await request(app).get("/activities/");
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -43,6 +49,4 @@ describe("Activities API", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Deletion Successful");
   });
-
 });
-
