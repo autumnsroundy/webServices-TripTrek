@@ -10,7 +10,8 @@
       { "name": "Melany Valencia", "email": "val18018@byui.edu" }
     ]
   },
-  "schemes": ["http", "https"],
+  "host": "webservices-triptrek-xyex.onrender.com",
+  "schemes": ["https"],
   "basePath": "/",
   "tags": [
     { "name": "users", "description": "Operations related to users" },
