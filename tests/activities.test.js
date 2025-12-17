@@ -2,11 +2,9 @@ const request = require("supertest");
 const express = require("express");
 const activitiesRoutes = require("../routes/activities");
 const mockAuth = require("./middleware/mockAuth");
+const models = require('../models/models')
 
-const app = express();
-app.use(express.json());
-app.use(mockAuth(global.mockUser));
-app.use("/activities", activitiesRoutes);
+let app;
 
 describe("Activities API", () => {
   let activityId;
@@ -19,6 +17,13 @@ describe("Activities API", () => {
     cost: 120
   };
 
+  beforeEach(()=> {
+    app = express();
+    app.use(express.json());
+    app.use(mockAuth(global.mockUser));
+    app.use("/activities", activitiesRoutes);
+  })
+
   it("GET /activities → should return activities for logged-in user", async () => {
     const res = await request(app).get("/activities/");
     expect(res.statusCode).toBe(200);
@@ -26,6 +31,12 @@ describe("Activities API", () => {
   });
 
   it("POST /activities → should create an activity", async () => {
+    models.Trip.insertOne({
+      userName: global.mockUser.userName,
+      tripTitle: testActivity.tripTitle,
+      startDate: '1/1/2025',
+      endDate: '1/2/2025'
+    })
     const res = await request(app).post("/activities/").send(testActivity);
     activityId = res.body._id;
     expect(res.statusCode).toBe(201);

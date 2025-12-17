@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
-require("dotenv").config();
 const { User } = require("../models/models");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_URI, { dbName: "jest_test_db" });
+  const instance = await MongoMemoryServer.create();
+  
+  await mongoose.connect(instance.getUri(), { dbName: "jest_test_db" });
   await User.deleteMany({});
 
   global.mockUser = await User.create({
